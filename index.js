@@ -1,27 +1,16 @@
-let epress= require('express');
-let hrroutes = require('./routes/hr_routes');
-let app= epress();
+const express = require('express');
+const hrRoutes = require('./routes/hr_routes');
+const empRoutes = require('./routes/emp_routes');
 
-app.use('/api/hr', hrroutes);
-//open browser locahost:3000/api/hr/employees
+const app = express();
 
-// thsi are sample tests only dont include this in this code
-//localhost:3000
-// app.get('/', (req, res) => {
-//     res.send('home page called');
-// });
-// //localhost:3000/aboutus
-// app.get('/aboutus', (req, res) => {
-//     res.send('about page called');
-// });
+app.use(express.json());
 
-// app.post('/addStudent', (req, res) => {
-//     res.send('add student called');
-// });
+// Mount routers
+app.use('/api/hr', hrRoutes);
+app.use('/api/emp', empRoutes);
 
-
-//run server in port 3000
-app.listen(3000, () => {
-    console.log('server running on port 3000')
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`server running on port ${PORT}`);
 });
-
