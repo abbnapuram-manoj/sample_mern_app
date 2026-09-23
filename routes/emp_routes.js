@@ -1,37 +1,42 @@
-//old code dont include this in the new code    
-// const express = require('express');
-// const router = express.Router();
-
-// // GET /api/emp/profile
-// router.get('/profile', (req, res) => {
-//     res.send('employee profile page called');
-// });
-
-// // GET /api/emp/attendance
-// router.get('/attendance', (req, res) => {
-//     res.send('employee attendance page called');
-// });
-
-// module.exports = router;
-
-
-
-
-
-//new code
 let express = require('express');
-
 let router = express.Router();
+let bcrypt = require('bcrypt');
+
+// Imported as 'User' to avoid variable shadowing collision inside routes
+let User = require('../models/users');
 
 // POST: /api/emp/register
-router.post('/register', (req, res) => {
-    let data = req.body;
-    res.send(data.name);
+router.post('/register', async (req, res) => {
+    try {
+        let data = req.body;
+        data.password = await bcrypt.hash(data.password, 10);
+        let newUser = new User(data);
+        let result = await newUser.save();
+        res.send(result);
+    } catch (err) {
+        res.send({ error: err.message });
+    }
 });
 
 // POST: /api/emp/login
-router.post('/login', (req, res) => {
-    res.send('login route called');
+router.post('/login', async (req, res) => {
+    try {
+        let users = await User.findOne({ email: req.body.email });
+
+        if (users) {
+            let passmatch = await bcrypt.compare(req.body.password, users.password);
+
+            if (passmatch) {
+                res.send("login successful");
+            } else {
+                res.send("password invalid");
+            }
+        } else {
+            res.send("email invalid");
+        }
+    } catch (err) {
+        res.send({ error: err.message });
+    }
 });
 
 // GET: /api/emp/viewtasks

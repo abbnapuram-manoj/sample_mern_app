@@ -1,8 +1,12 @@
 let express= require('express');
 let router= express.Router();
 
-router.get('/employees', (req, res) => {
-    res.send('employees called');
+
+let {User}= require('../models/users');    
+router.get('/employees', async (req, res) => {
+    let result= await User.find();
+    result.password= undefined; // Hide password field for security 
+    res.send(result);
 });
 
 router.get('/assign-tasks', (req, res) => {
