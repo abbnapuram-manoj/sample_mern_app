@@ -1,19 +1,18 @@
-let express= require('express');
-let router= express.Router();
+let express = require('express');
+let router = express.Router();
 
+// 1. Import directly without curly brackets as 'users'
+let users = require('../models/users');    
 
-let {User}= require('../models/users');    
 router.get('/employees', async (req, res) => {
-    let result= await User.find();
-    result.password= undefined; // Hide password field for security 
+    let result = await users.find();
+    result.password = undefined; 
     res.send(result);
 });
 
 router.get('/assign-tasks', (req, res) => {
-    res.send('assign task page  called');
+    res.send('assign task page called');
 });
-
-//2 more routs with end points task and notification in get method
 
 router.get('/task', (req, res) => {
     res.send('task page called');
@@ -23,4 +22,14 @@ router.get('/notification', (req, res) => {
     res.send('notification page called');
 });
 
-module.exports=router;
+// 2. Uses 'users.findByIdAndDelete'
+router.delete("/deleteemp/:id", async (req, res) => {
+    let result = await users.findByIdAndDelete(req.params.id);
+    if (result) {
+        res.send("emp record deleted success");
+    } else {
+        res.send("delete route called");
+    }
+});
+
+module.exports = router;
