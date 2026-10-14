@@ -1,12 +1,25 @@
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import About from './pages/About';
+import Services from './pages/Services';
+import Contact from './pages/Contact';
+import Login from './pages/Login';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <div>
       <Header />
-      <h1>my first react app</h1>
-      <h1>created by manoj</h1>
+
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/about" element={<About />}></Route>
+        <Route path="/services" element={<Services />}></Route>
+        <Route path="/contact" element={<Contact />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+      </Routes>
+
       <Footer />
     </div>
   );
